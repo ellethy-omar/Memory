@@ -10,7 +10,7 @@ void shortestJobFirstAlgorithm()
     
     currentTime = 1;
 
-    while (!IsProcessGeneratoroutOfProcesses || !isEmptyPriorty(globalPCBpriQueue))
+    while (!IsProcessGeneratoroutOfProcesses || !isEmptyPriorty(globalPCBpriQueue) || !isEmpty(globalBLockedProcessesQueue))
     {
         while (isEmptyPriorty(globalPCBpriQueue) && !processRunning)
         {
@@ -23,7 +23,19 @@ void shortestJobFirstAlgorithm()
 
         while (processRunning);
 
-        globalRunningPCBObject = dequeuePriority(globalPCBpriQueue);
+        if (!isEmpty(globalBLockedProcessesQueue))
+        {
+            globalRunningPCBObject = dequeue(globalBLockedProcessesQueue);
+        
+            startProcess();
+        }
+
+        while (processRunning);
+
+        if (!isEmptyPriorty(globalPCBpriQueue))
+        {
+            globalRunningPCBObject = dequeuePriority(globalPCBpriQueue);
+        }
 
         if (globalRunningPCBObject.processID != -1)
             startProcess();

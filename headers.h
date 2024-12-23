@@ -9,9 +9,9 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdbool.h>
 #include <signal.h>
 
-typedef short bool;
 #define true 1
 #define false 0
 

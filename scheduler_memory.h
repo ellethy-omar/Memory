@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "headers.h"
 
 #define TOTAL_MEMORY 1024
 
@@ -29,6 +28,7 @@ void initializeMemory() {
 }
 
 MemoryBlock* allocateBlock(MemoryBlock* block, int size) {
+    printf("block size = %d\n", block->size);
     // check if block isn't free and if it is too small
     if (!block->is_free || block->size < size) {
         return NULL; 
@@ -36,13 +36,13 @@ MemoryBlock* allocateBlock(MemoryBlock* block, int size) {
 
     // check if block is exactly the same size and take it
     if (block->size == size) {
-        block->is_free = false;  
+        block->is_free = false;
         return block;
     }
 
     // check if block can't be split
     if (block->size > size && block->size < size * 2) {
-        block->is_free = false;  
+        block->is_free = false;
         return block;
     }
 
@@ -100,9 +100,10 @@ void deallocateBlock(MemoryBlock* block, int start) {
 // Function to allocate memory
 bool allocateMemory(int processId, int size, int time) {
     MemoryBlock* allocatedBlock = allocateBlock(memoryRoot, size);
+    printf("Entered allocateMemory\n");
     if (allocatedBlock) {
         // logAllocation(processId, size, allocatedBlock->start, allocatedBlock->start + size - 1, time);
-        printf(processId, size, allocatedBlock->start, allocatedBlock->start + size - 1, time);
+        // printf(processId, size, allocatedBlock->start, allocatedBlock->start + size - 1, time);
         globalRunningPCBObject.memoryStart = allocatedBlock->start;
 
         return true;
@@ -116,5 +117,5 @@ bool allocateMemory(int processId, int size, int time) {
 void deallocateMemory(int processId, int start, int time) {
     deallocateBlock(memoryRoot, start);
     // logDeallocation(processId, start, start + 256 - 1, time);
-    printf(processId, start, start + 256 - 1, time);
+    // printf(processId, start, start + 256 - 1, time);
 }

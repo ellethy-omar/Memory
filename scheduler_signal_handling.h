@@ -10,6 +10,7 @@
 
 Queue* globalPCBQueue;
 PriorityQueue* globalPCBpriQueue;
+Queue* globalBLockedProcessesQueue;
 
 int schedulingAlgorithm;
 int msgq_id;
@@ -22,6 +23,12 @@ bool IsProcessGeneratoroutOfProcesses;
 
 void startProcess()
 {
+    if (!allocateMemory(globalRunningPCBObject.processID, globalRunningPCBObject.memorySize, getClk()))
+    {
+        enqueue(globalBLockedProcessesQueue, globalRunningPCBObject);    
+        return;
+    }
+
     int forkID = fork();
     if (forkID == 0)
     {
@@ -161,6 +168,8 @@ void handleProcessExiting(int sig) {
             
             int exitCode = WEXITSTATUS(status);
             printf("Child of scheduler exited with code (id): %d\n", exitCode);
+
+            deallocateMemory(globalRunningPCBObject.processID, globalRunningPCBObject.memoryStart, getClk());
 
             FinishedState finishedProcess;
             finishedProcess.waitingTime = globalRunningPCBObject.waitingTime;

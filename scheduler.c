@@ -1,4 +1,3 @@
-#include "headers.h"
 #include "scheduler_algorithms.h"
 
 int main(int argc, char *argv[])
@@ -24,6 +23,12 @@ int main(int argc, char *argv[])
     LinkedListFinishedState finishedList;
     initList(&finishedList);
     finishedProcessesList = &finishedList;
+
+    initializeMemory();
+
+    Queue BlockedProcessesQueue;
+    globalBLockedProcessesQueue = &BlockedProcessesQueue;
+    initQueue(globalBLockedProcessesQueue);
 
     schedulingAlgorithm = atoi(argv[1]);
     int roundRobinQuantum = -1;
