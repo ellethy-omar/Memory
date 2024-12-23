@@ -210,6 +210,7 @@ void clearResourcesScheduler(int signum)
     fprintf(writerLogPref, "WTA = %.2f\n", (float)(sumWTA) / (float)(countOfProcesses));
     fprintf(writerLogPref, "Avg Waiting = %.2f", (float)(sumWaitingTime) / (float)(countOfProcesses));
     fclose(writerLogPref);
+    fclose(wirterMemoryLog);
 
     printf("Scheduler terminating\n");
     destroyClk(false);

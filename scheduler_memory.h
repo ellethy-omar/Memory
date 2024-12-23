@@ -98,24 +98,20 @@ void deallocateBlock(MemoryBlock* block, int start) {
 }
 
 // Function to allocate memory
-bool allocateMemory(int processId, int size, int time) {
-    MemoryBlock* allocatedBlock = allocateBlock(memoryRoot, size);
-    printf("Entered allocateMemory\n");
+bool allocateMemory() {
+    MemoryBlock* allocatedBlock = allocateBlock(memoryRoot, globalRunningPCBObject.memorySize);
     if (allocatedBlock) {
-        // logAllocation(processId, size, allocatedBlock->start, allocatedBlock->start + size - 1, time);
-        // printf(processId, size, allocatedBlock->start, allocatedBlock->start + size - 1, time);
         globalRunningPCBObject.memoryStart = allocatedBlock->start;
-
+        logMemoryAllocated();
         return true;
     } else {
-        printf("Error: Not enough memory for process %d\n", processId);
+        printf("Error: Not enough memory for process %d\n", globalRunningPCBObject.processID);
         return false;
     }
 }
 
 // Function to deallocate memory
-void deallocateMemory(int processId, int start, int time) {
-    deallocateBlock(memoryRoot, start);
-    // logDeallocation(processId, start, start + 256 - 1, time);
-    // printf(processId, start, start + 256 - 1, time);
+void deallocateMemory() {
+    deallocateBlock(memoryRoot, globalRunningPCBObject.memoryStart);
+    logMemoryDeallocated();
 }

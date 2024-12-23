@@ -20,6 +20,9 @@ int main(int argc, char *argv[])
     writerLogPref = fopen("scheduler.log", "w");
     fprintf(writerLogPref, "#id arrival runtime priority\n");
     
+    wirterMemoryLog = fopen("memory.log", "w");
+    fprintf(wirterMemoryLog, "#At time x allocated y bytes for process z from i to j\n");
+
     LinkedListFinishedState finishedList;
     initList(&finishedList);
     finishedProcessesList = &finishedList;

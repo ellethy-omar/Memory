@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include "headers.h"
 //------------------------------------------
 //  STRUCT DEFINITIONS
 //------------------------------------------
@@ -140,52 +140,8 @@ void multiLevelEnqueue(Queue* queuesPointer, ProceesControlBlock pcb)
     enqueue(&queuesPointer[pcb.priority], pcb);
 }
 
-void multiLevelRearrange(Queue* queuesPointer)
-{
-    ProceesControlBlock pcb;
-
-    Queue tempLastQueue;
-    initQueue(&tempLastQueue);
-
-    while (!isEmpty(&queuesPointer[10]))
-    {
-        pcb = dequeue(&queuesPointer[10]);
-        
-        if (pcb.originalPriority == 10)
-        {
-            enqueue(&tempLastQueue, pcb);
-        }
-        else
-        {
-            pcb.priority = pcb.originalPriority;
-            multiLevelEnqueue(queuesPointer, pcb);
-        }
-    }
-
-    while (!isEmpty(&tempLastQueue))
-    {
-        pcb = dequeue(&tempLastQueue);
-
-        enqueue(&tempLastQueue, pcb);
-    }
-}
-
 ProceesControlBlock multiLevelDequeue(Queue* queuesPointer)
 {
-    bool allHigherQueuesAreEmpty = true;
-
-    for (int i = 0; i < 10; i++)
-    {
-        if (!isEmpty(&queuesPointer[i]))
-        {
-            allHigherQueuesAreEmpty = false;
-            break;
-        }
-    }       
-    
-    if (allHigherQueuesAreEmpty)
-        multiLevelRearrange(queuesPointer);
-
     for (int i = 0; i < 11; i++)
     {
         if (!isEmpty(&queuesPointer[i]))
