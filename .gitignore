@@ -1,0 +1,6 @@
+.vscode/
+*.out
+*.txt
+scheduler.log
+scheduler.perf
+Makefile
