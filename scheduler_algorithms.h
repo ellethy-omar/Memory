@@ -94,7 +94,7 @@ void roundRobinAlgorithm(int* roundRobinQuantum)
     
     currentTime = getClk();
 
-    while (!IsProcessGeneratoroutOfProcesses || !isEmpty(globalPCBQueue))
+    while (!IsProcessGeneratoroutOfProcesses || !isEmpty(globalPCBQueue) || !isEmpty(globalBLockedProcessesQueue))
     {
         while (isEmpty(globalPCBQueue) && !processRunning)
         {
@@ -103,6 +103,12 @@ void roundRobinAlgorithm(int* roundRobinQuantum)
                 idleTime++;
                 currentTime = getClk();
             }
+        }
+
+        if(!isEmpty(globalBLockedProcessesQueue))
+        {
+            globalRunningPCBObject = dequeue(globalBLockedProcessesQueue);
+            startProcess();
         }
 
         if (processRunning)
@@ -133,6 +139,27 @@ void roundRobinAlgorithm(int* roundRobinQuantum)
         else if (globalRunningPCBObject.status == 2)
             resumeCurrentProcess();
 
+         if (processRunning)
+        {
+            for (int i = 0; i < *roundRobinQuantum; i++)
+            {
+                currentTime = getClk();
+                while (getClk() <= currentTime)
+                    if (!processRunning)
+                        break;
+                    
+
+                if (!processRunning)
+                    break;
+            }
+
+            if (processRunning)
+            {
+                interruptCurrentProcess();
+                enqueue(globalPCBQueue, globalRunningPCBObject);
+            }
+        }
+
         currentTime = getClk();
     };
 
@@ -153,7 +180,7 @@ void multiLevelFeedbackLoopAlgorithm(int* roundRobinQuantum)
 
     currentTime = getClk();
 
-    while (!IsProcessGeneratoroutOfProcesses || !multiLevelIsEmpty(globalPCBQueue))
+    while (!IsProcessGeneratoroutOfProcesses || !multiLevelIsEmpty(globalPCBQueue) || !isEmpty(globalBLockedProcessesQueue))
     {
         while (multiLevelIsEmpty(globalPCBQueue) && !processRunning)
         {
@@ -162,6 +189,13 @@ void multiLevelFeedbackLoopAlgorithm(int* roundRobinQuantum)
                 idleTime++;
                 currentTime = getClk();
             }
+        }
+
+        
+        if(!isEmpty(globalBLockedProcessesQueue))
+        {
+            globalRunningPCBObject = dequeue(globalBLockedProcessesQueue);
+            startProcess();
         }
 
         if (processRunning)
@@ -191,6 +225,27 @@ void multiLevelFeedbackLoopAlgorithm(int* roundRobinQuantum)
             startProcess();
         else if (globalRunningPCBObject.status == 2)
             resumeCurrentProcess();
+
+        if (processRunning)
+        {
+            for (int i = 0; i < *roundRobinQuantum; i++)
+            {
+                currentTime = getClk();
+                while (getClk() <= currentTime)
+                    if (!processRunning)
+                        break;
+                    
+
+                if (!processRunning)
+                    break;
+            }
+
+            if (processRunning)
+            {
+                interruptCurrentProcess();
+                multiLevelEnqueue(globalPCBQueue, globalRunningPCBObject);
+            }
+        }
 
         currentTime = getClk();
     };
