@@ -10,7 +10,6 @@ typedef struct ProceesControlBlock {
     int processID;
     int arrivalTime;
     int priority;
-    int originalPriority;   // for multi-lvel reArrangment
     int runningTime;
     int waitingTime;
     int forkID;
