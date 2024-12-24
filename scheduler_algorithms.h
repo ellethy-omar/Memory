@@ -52,7 +52,7 @@ void prememtiveHigheestPriorityFirstAlgorithm()
 
     currentTime = getClk();
 
-    while (!IsProcessGeneratoroutOfProcesses || !isEmptyPriorty(globalPCBpriQueue))
+    while (!IsProcessGeneratoroutOfProcesses || !isEmptyPriorty(globalPCBpriQueue) || !isEmpty(globalBLockedProcessesQueue))
     {
         while (isEmptyPriorty(globalPCBpriQueue) && !processRunning)
         {
@@ -63,6 +63,14 @@ void prememtiveHigheestPriorityFirstAlgorithm()
             }
         }
 
+        if (!isEmpty(globalBLockedProcessesQueue))
+        {
+            globalRunningPCBObject = dequeue(globalBLockedProcessesQueue);
+        
+            if (globalRunningPCBObject.status == 0)
+                startProcess();
+        }
+
         while (processRunning);
 
         globalRunningPCBObject = dequeuePriority(globalPCBpriQueue);
@@ -71,6 +79,8 @@ void prememtiveHigheestPriorityFirstAlgorithm()
             startProcess();
         else if (globalRunningPCBObject.status == 2)
             resumeCurrentProcess();
+
+        while (processRunning);
     };
 
     while (processRunning);
