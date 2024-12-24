@@ -113,7 +113,6 @@ void receiveProcessFromProcessGenerator(int signum)
             dummyPCBObject.status = 0;
             dummyPCBObject.waitingTime = 0;
             dummyPCBObject.interupredAt = dummyPCBObject.arrivalTime;
-            dummyPCBObject.originalPriority = dummyPCBObject.priority;
 
             switch (schedulingAlgorithm)
             {
